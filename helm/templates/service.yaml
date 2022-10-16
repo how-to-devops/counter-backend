@@ -10,9 +10,9 @@ metadata:
   name: {{ .Chart.Name }}
 spec:
   ports:
-  - name: REST
+  - name: rest
     port: {{ .Values.port }}
-    protocol: TCP
+    protocol: tcp
     targetPort: {{ .Values.port }}
   selector:
     app: {{ .Chart.Name }}

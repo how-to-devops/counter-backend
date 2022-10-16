@@ -29,6 +29,9 @@ jobs:
           tags: ghcr.io/how-to-devops/counter-backend:0.1.0-${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Package and push Helm chart
+        env:
+          HELM_REPO_USERNAME: ${{ secrets.HELM_REPO_USERNAME }}
+          HELM_REPO_PASSWORD: ${{ secrets.HELM_REPO_PASSWORD }}
         run: |
-          helm package helm/ --version 0.1.0-${{ github.sha }}
-          helm push counter-backend-0.1.0-${{ github.sha }}.tgz oci://ghcr.io/how-to-devops/charts
+          helm package helm/ --version 0.1.0+${{ github.sha }}
+          curl -u $HELM_REPO_USERNAME:$HELM_REPO_PASSWORD -X PUT "https://howtodevops.jfrog.io/artifactory/charts-local/counter-backend-0.1.0+${{ github.sha }}.tgz" -T counter-backend-0.1.0+${{ github.sha }}.tgz
